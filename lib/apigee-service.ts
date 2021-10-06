@@ -312,7 +312,156 @@ export class ApigeeService implements ApiManagementInterface {
         console.error(error);
         reject(error);
       });
-    });   }
+    });   
+  }
+
+  getApp(email: string, appName: string): Promise<App> {
+    return new Promise((resolve, reject) => {
+      this.getToken().then((token) => {
+        axios(
+          {
+            "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}`,
+            "method": "get",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + token
+            }
+          }
+        ).then((response) => {
+          let apigeeApp: ApigeeApp = response.data as ApigeeApp;
+          let app: App = {
+            appId: apigeeApp.appId,
+            name: apigeeApp.name,
+            createdAt: apigeeApp.createdAt,
+            credentials: [],
+            apiProducts: apigeeApp.apiProducts
+          };
+
+          apigeeApp.credentials.forEach((apigeeCredential: ApigeeAppCredential) => {
+            let appCredential: AppCredential = {
+              key: apigeeCredential.consumerKey,
+              secret: apigeeCredential.consumerSecret,
+              issuedAt: apigeeCredential.issuedAt,
+              expiresAt: apigeeCredential.expiresAt,
+              scopes: apigeeCredential.scopes,
+              status: apigeeCredential.status 
+            }
+
+            app.credentials.push(appCredential);
+          });
+
+          resolve(app);
+        }).catch((error) => {
+          if (error.response && error.response.data)
+            resolve(error.response.data as App);
+          else
+            reject(error);
+        });
+      }).catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+    }); 
+  }
+
+  updateApp(email: string, appName: string, app: App): Promise<App> {
+    return new Promise((resolve, reject) => {
+      this.getToken().then((token) => {
+        axios(
+          {
+            "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}`,
+            "method": "put",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + token
+            },
+            "data": app
+          }
+        ).then((response) => {
+          let apigeeApp: ApigeeApp = response.data as ApigeeApp;
+          let app: App = {
+            appId: apigeeApp.appId,
+            name: apigeeApp.name,
+            createdAt: apigeeApp.createdAt,
+            credentials: [],
+            apiProducts: apigeeApp.apiProducts
+          };
+
+          apigeeApp.credentials.forEach((apigeeCredential: ApigeeAppCredential) => {
+            let appCredential: AppCredential = {
+              key: apigeeCredential.consumerKey,
+              secret: apigeeCredential.consumerSecret,
+              issuedAt: apigeeCredential.issuedAt,
+              expiresAt: apigeeCredential.expiresAt,
+              scopes: apigeeCredential.scopes,
+              status: apigeeCredential.status
+            }
+
+            app.credentials.push(appCredential);
+          });
+
+          resolve(app);
+        }).catch((error) => {
+          if (error.response && error.response.data)
+            resolve(error.response.data as App);
+          else
+            reject(error);
+        });
+      }).catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+    }); 
+  }
+  
+  deleteApp(email: string, appName: string): Promise<App> {
+    return new Promise((resolve, reject) => {
+      this.getToken().then((token) => {
+        axios(
+          {
+            "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}`,
+            "method": "delete",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + token
+            }
+          }
+        ).then((response) => {
+          let apigeeApp: ApigeeApp = response.data as ApigeeApp;
+          let app: App = {
+            appId: apigeeApp.appId,
+            name: apigeeApp.name,
+            createdAt: apigeeApp.createdAt,
+            credentials: [],
+            apiProducts: apigeeApp.apiProducts
+          };
+
+          apigeeApp.credentials.forEach((apigeeCredential: ApigeeAppCredential) => {
+            let appCredential: AppCredential = {
+              key: apigeeCredential.consumerKey,
+              secret: apigeeCredential.consumerSecret,
+              issuedAt: apigeeCredential.issuedAt,
+              expiresAt: apigeeCredential.expiresAt,
+              scopes: apigeeCredential.scopes,
+              status: apigeeCredential.status
+            }
+
+            app.credentials.push(appCredential);
+          });
+
+          resolve(app);
+        }).catch((error) => {
+          if (error.response && error.response.data)
+            resolve(error.response.data as App);
+          else
+            reject(error);
+        });
+      }).catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+    }); 
+  }
 
   getToken(): Promise<string> {
     return new Promise((resolve, reject) => {
