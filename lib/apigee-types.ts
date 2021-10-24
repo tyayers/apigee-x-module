@@ -8,6 +8,7 @@ interface ApigeeApiProduct {
   name: string;
   displayName: string;
   description: string;
+  approvalType: string;
   attributes: KeyValue[];
 }
 
@@ -39,6 +40,7 @@ interface ApigeeAppCredential {
 
 interface ApigeeApiProductName {
   apiproduct: string;
+  status: string;
 }
 
 interface ApigeeAccessToken {
@@ -144,6 +146,7 @@ interface ApiProduct {
   name: string;
   displayName: string;
   description?: string;
+  approvalType: string;
   image?: string;
   specUrl?: string;
   status?: string;
@@ -189,18 +192,24 @@ interface App {
   name: string;
   createdAt: string;
   callbackUrl?: string;
-  apiProducts: string[];
+  apiProducts?: string[];
   status?: string;
   credentials?: AppCredential[];
   error?: Error;
 }
 
 interface AppCredential {
-  key: string;
-  secret: string;
+  consumerKey: string;
+  consumerSecret: string;
   issuedAt: string;
   expiresAt: string;
   scopes?: string[];
+  apiProducts?: AppCredentialProduct[];
+  status?: string;
+}
+
+interface AppCredentialProduct {
+  apiproduct: string;
   status?: string;
 }
 
@@ -257,6 +266,7 @@ interface error {
 
 export {
   ApigeeApiProducts,
+  ApigeeApiProduct,
   ApiProducts,
   ApiProduct,
   ApigeeDevelopers,

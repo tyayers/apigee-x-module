@@ -1,5 +1,5 @@
 import { ApiManagementInterface } from "../lib/apigee-interface";
-import { Developers, Developer, Apps, App } from "../lib/apigee-types";
+import { ApiProduct, Developers, Developer, Apps, App, AppCredential } from "../lib/apigee-types";
 import { ApigeeService } from "../lib/apigee-service";
 import { expect } from "chai";
 import { doesNotMatch } from "assert";
@@ -17,7 +17,40 @@ let testDeveloper: Developer = {
   lastName: "Developer"
 };
 
+let testApiProduct1: ApiProduct = {
+  "name": "Test Product 1",
+  "displayName": "Test Product 1",
+  "approvalType": "auto",
+  "description": "Test Product 1"
+};
+
+let testApiProduct2: ApiProduct = {
+  "name": "Test Product 2",
+  "displayName": "Test Product 2",
+  "approvalType": "auto",
+  "description": "Test Product 2"
+};
+
 let testAppName: string = "Test App";
+let testApp: App;
+
+describe('Create API Product 1', () => {
+  return it('should create a new API product', () => {
+    return apigeeService.createApiProduct(testApiProduct1).then((response: ApiProduct) => {
+      // console.log(response);
+      expect(response.name).to.equal(testApiProduct1.name);
+    });
+  });
+});
+
+describe('Create API Product 2', () => {
+  return it('should create a new API product', () => {
+    return apigeeService.createApiProduct(testApiProduct2).then((response: ApiProduct) => {
+      // console.log(response);
+      expect(response.name).to.equal(testApiProduct2.name);
+    });
+  });
+});
 
 describe('Create Developer', () => {
   return it('should create a new developer', () => {
@@ -73,6 +106,52 @@ describe('Get apps', () => {
   });
 });
 
+describe('Create App for product', () => {
+  return it('should return an app to access product 1', () => {
+    return apigeeService.createApp(testDeveloper.email, testAppName, [testApiProduct1.name]).then((response: App) => {
+      // console.log(response);
+      expect(response.name).to.equal(testAppName);
+      expect(response.credentials[0].apiProducts.length).to.equal(1);
+      expect(response.credentials[0].apiProducts[0].apiproduct).to.equal(testApiProduct1.name);
+      
+      testApp = response;
+    });
+  });
+});
+
+describe('Add a product to an existing key', () => {
+  return it('should return an updated credential object with new product added', () => {
+    
+    testApp.credentials[0].apiProducts.push({
+      apiproduct: testApiProduct2.name
+    });
+
+    return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
+      // console.log(response);
+
+      expect(response.apiProducts[0].apiproduct === testApiProduct1.name);
+      expect(response.apiProducts[1].apiproduct === testApiProduct2.name);
+      expect(response.apiProducts.length).to.equal(2);
+      testApp.credentials[0] = response;
+    });
+  });
+});
+
+describe('Remove a product from an existing key', () => {
+  return it('should return an updated credential object without removed product', () => {
+    
+    // Remove product that was added
+    testApp.credentials[0].apiProducts.splice(1, 1);
+
+    return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
+      console.log(response);
+
+      expect(response.apiProducts.length).to.equal(1);
+      expect(response.apiProducts[0].apiproduct === testApiProduct1.name);
+    });
+  });
+});
+
 describe('Delete Developer', () => {
   return it('should delete the test developer', () => {
     return apigeeService.deleteDeveloper(testDeveloper.email).then((response: Developer) => {
@@ -81,3 +160,23 @@ describe('Delete Developer', () => {
     });
   });
 });
+
+describe('Delete API Product 1', () => {
+  return it('should delete the api product', () => {
+    return apigeeService.deleteApiProduct(testApiProduct1.name).then((response: ApiProduct) => {
+      // console.log(response);
+      expect(response.name).to.equal(testApiProduct1.name);
+    });
+  });
+});
+
+describe('Delete API Product 2', () => {
+  return it('should delete the api product', () => {
+    return apigeeService.deleteApiProduct(testApiProduct2.name).then((response: ApiProduct) => {
+      //console.log(response);
+      expect(response.name).to.equal(testApiProduct2.name);
+    });
+  });
+});
+
+
