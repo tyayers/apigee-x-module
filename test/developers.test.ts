@@ -8,7 +8,7 @@ require('mocha');
 
 require('dotenv').config()
 
-let apigeeService: ApiManagementInterface = new ApigeeService(process.env.SERVICE_ACCOUNT_EMAIL, process.env.SERVICE_ACCOUNT_KEY, process.env.APIGEE_ORG);
+let apigeeService: ApiManagementInterface = new ApigeeService(process.env.APIGEE_ORG);
 
 let testDeveloper: Developer = {
   email: "test.developer@example.com",
@@ -144,7 +144,7 @@ describe('Remove a product from an existing key', () => {
     testApp.credentials[0].apiProducts.splice(1, 1);
 
     return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
-      console.log(response);
+      //console.log(response);
 
       expect(response.apiProducts.length).to.equal(1);
       expect(response.apiProducts[0].apiproduct === testApiProduct1.name);

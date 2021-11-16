@@ -8,7 +8,7 @@ require('mocha');
 
 require('dotenv').config()
 
-let apigeeService: ApiManagementInterface = new ApigeeService(process.env.SERVICE_ACCOUNT_EMAIL, process.env.SERVICE_ACCOUNT_KEY, process.env.APIGEE_ORG);
+let apigeeService: ApiManagementInterface = new ApigeeService(process.env.APIGEE_ORG);
 
 describe('Get API products', () => {
   return it('should return list of API products with length > 0', () => {

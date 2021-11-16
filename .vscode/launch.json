@@ -5,6 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/test/temptest.js",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "pwa-node",
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tyayers/key-bap.json"
+      }
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Mocha All",
@@ -19,7 +31,10 @@
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "protocol": "inspector"
+      "protocol": "inspector",
+      "env":{
+        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tyayers/key-bap.json"
+      }
   },
   ]
 }

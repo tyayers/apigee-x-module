@@ -147,9 +147,10 @@ interface ApiProduct {
   displayName: string;
   description?: string;
   approvalType: string;
-  image?: string;
+  imageUrl?: string;
   specUrl?: string;
   status?: string;
+  access?: string;
 }
 
 interface Developers {
@@ -206,6 +207,7 @@ interface AppCredential {
   scopes?: string[];
   apiProducts?: AppCredentialProduct[];
   status?: string;
+  error?: Error;
 }
 
 interface AppCredentialProduct {
