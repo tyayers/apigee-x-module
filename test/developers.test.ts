@@ -8,7 +8,7 @@ require('mocha');
 
 require('dotenv').config()
 
-let apigeeService: ApiManagementInterface = new ApigeeService(process.env.APIGEE_ORG);
+let apigeeService: ApiManagementInterface = new ApigeeService();
 
 let testDeveloper: Developer = {
   email: "test.developer@example.com",

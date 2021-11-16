@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch Program",
+      "name": "Launch temptest.js",
       "program": "${workspaceFolder}/test/temptest.js",
       "request": "launch",
       "skipFiles": [

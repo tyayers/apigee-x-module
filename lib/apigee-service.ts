@@ -4,24 +4,16 @@ const auth = new GoogleAuth({
   scopes: 'https://www.googleapis.com/auth/cloud-platform'
 });
 
-//require ("apigee-types")
 import { ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential } from "./apigee-types"
 import { ApiManagementInterface } from "./apigee-interface";
-import { resourceLimits } from "worker_threads";
 
 export class ApigeeService implements ApiManagementInterface {
-  apigeeOrganization: string;
-  //client: any;
-
-  constructor(org: string) {
-    this.apigeeOrganization = org;
-  }
 
   getApiProducts(): Promise<ApiProducts> {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          url: `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/apiproducts?expand=true`,
+          url: `https://apigee.googleapis.com/v1/organizations/${client.projectId}/apiproducts?expand=true`,
           method: 'GET'
         }).then((response) => {
           let apigeeProducts: ApigeeApiProducts = response.data as ApigeeApiProducts;
@@ -55,7 +47,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          url: `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/apiproducts`,
+          url: `https://apigee.googleapis.com/v1/organizations/${client.projectId}/apiproducts`,
           method: "post",
           headers: {
             "Content-Type": "application/json"
@@ -87,7 +79,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/apiproducts/${apiProductName}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/apiproducts/${apiProductName}`,
           "method": "delete",
           "headers": {
             "Content-Type": "application/json"
@@ -109,7 +101,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers?expand=true`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers?expand=true`,
           "method": "get",
           "headers": {
             "Content-Type": "application/json"
@@ -136,7 +128,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}`,
           "method": "get",
           "headers": {
             "Content-Type": "application/json"
@@ -161,7 +153,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers`,
           "method": "post",
           "headers": {
             "Content-Type": "application/json"
@@ -188,7 +180,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${developerData.email}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${developerData.email}`,
           "method": "put",
           "headers": {
             "Content-Type": "application/json"
@@ -212,7 +204,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}`,
           "method": "delete",
           "headers": {
             "Content-Type": "application/json"
@@ -235,7 +227,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps?expand=true`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps?expand=true`,
           "method": "get",
           "headers": {
             "Content-Type": "application/json"
@@ -270,7 +262,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps`,
           "method": "post",
           "headers": {
             "Content-Type": "application/json"
@@ -299,7 +291,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps/${appName}`,
           "method": "get",
           "headers": {
             "Content-Type": "application/json"
@@ -324,7 +316,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps/${appName}`,
           "method": "put",
           "headers": {
             "Content-Type": "application/json"
@@ -350,7 +342,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}/keys/${keyName}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps/${appName}/keys/${keyName}`,
           "method": "get",
           "headers": {
             "Content-Type": "application/json"
@@ -399,7 +391,7 @@ export class ApigeeService implements ApiManagementInterface {
           key.apiProducts = newProductsArray;
           auth.getClient().then((client) => {
             client.request({
-              "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}/keys/${key.consumerKey}`,
+              "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps/${appName}/keys/${key.consumerKey}`,
               "method": "put",
               "headers": {
                 "Content-Type": "application/json"
@@ -430,7 +422,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}/keys/${keyName}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps/${appName}/keys/${keyName}`,
           "method": "post",
           "headers": {
             "Content-Type": "application/json"
@@ -458,7 +450,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}/keys/${keyName}/apiproducts/${apiProduct}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps/${appName}/keys/${keyName}/apiproducts/${apiProduct}`,
           "method": "delete",
           "headers": {
             "Content-Type": "application/json"
@@ -483,7 +475,7 @@ export class ApigeeService implements ApiManagementInterface {
     return new Promise((resolve, reject) => {
       auth.getClient().then((client) => {
         client.request({
-          "url": `https://apigee.googleapis.com/v1/organizations/${this.apigeeOrganization}/developers/${email}/apps/${appName}`,
+          "url": `https://apigee.googleapis.com/v1/organizations/${client.projectId}/developers/${email}/apps/${appName}`,
           "method": "delete",
           "headers": {
             "Content-Type": "application/json"
@@ -503,17 +495,4 @@ export class ApigeeService implements ApiManagementInterface {
       });
     });
   }
-
-  // getClient(): Promise<any> {
-  //   return new Promise((resolve, reject) => {
-  //     if (!this.client) {
-  //       auth.getClient().then((newClient) => {
-  //         this.client = newClient;
-  //         resolve(this.client);
-  //       });
-  //     }
-  //     else
-  //       resolve(this.client);
-  //   })
-  // }
 }
