@@ -144,6 +144,7 @@ interface ApiProducts {
 
 interface ApiProduct {
   name: string;
+  type?: string;
   displayName: string;
   description?: string;
   approvalType: string;
@@ -257,6 +258,22 @@ interface DevCreditAccount {
   amount: number;
 }
 
+interface ProxyRevision {
+  name: string,
+  createdAt?: string,
+  displayName?: string,
+  description?: string,
+  lastModifiedAt?: string,
+  revision: string
+}
+
+interface ProxyDeployment {
+  environment: string,
+  apiProxy: string,
+  revision: string,
+  deployStartTime: string
+}
+
 interface Response {
   status: number;
   data: object;
@@ -280,5 +297,7 @@ export {
   Developer,
   Apps,
   App,
-  AppCredential
+  AppCredential,
+  ProxyRevision,
+  ProxyDeployment
 }

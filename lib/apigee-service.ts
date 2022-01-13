@@ -1,13 +1,60 @@
+const FormData = require('form-data');
+const fs = require('fs');
 const axios = require('axios');
 const { GoogleAuth } = require('google-auth-library');
 const auth = new GoogleAuth({
   scopes: 'https://www.googleapis.com/auth/cloud-platform'
 });
 
-import { ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential } from "./apigee-types"
+import { ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential, ProxyRevision, ProxyDeployment } from "./apigee-types"
 import { ApiManagementInterface } from "./apigee-interface";
 
 export class ApigeeService implements ApiManagementInterface {
+
+  updateProxy(proxyName: string, bundlePath: string): Promise<ProxyRevision> {
+    return new Promise((resolve, reject) => {
+      auth.getProjectId().then((projectId) => {
+        auth.getAccessToken().then((token) => {
+          const form = new FormData();
+          var newFile = fs.readFileSync(bundlePath);
+          form.append('file', newFile, `${proxyName + ".zip"}`);
+
+          axios.request({
+            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/apis?name=${proxyName}&action=import`,
+            method: "post",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              ...form.getHeaders()
+            },            
+            data: form
+          }).then((response) => {
+            let proxyRevision: ProxyRevision = response.data as ProxyRevision;
+            resolve(proxyRevision);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
+  }
+
+  deployProxyRevision(environmentName: string, proxyName: string, proxyRevision: string): Promise<ProxyDeployment> {
+    return new Promise((resolve, reject) => {
+      auth.getProjectId().then((projectId) => {
+        auth.getClient().then((client) => {
+          client.request({
+            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/environments/${environmentName}/apis/${proxyName}/revisions/${proxyRevision}/deployments?override=true`,
+            method: "post"
+          }).then((response) => {
+            let apigeeDeployment: ProxyDeployment = response.data as ProxyDeployment;
+            resolve(apigeeDeployment);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
+  }
 
   getApiProducts(): Promise<ApiProducts> {
     return new Promise((resolve, reject) => {
@@ -30,6 +77,7 @@ export class ApigeeService implements ApiManagementInterface {
                     if (attr.name === "image") apiProduct.imageUrl = attr.value;
                     if (attr.name === "spec") apiProduct.specUrl = attr.value;
                     if (attr.name === "access") apiProduct.access = attr.value;
+                    if (attr.name === "type") apiProduct.type = attr.value;
                   }
 
                 products.apiProducts.push(apiProduct);
@@ -65,6 +113,7 @@ export class ApigeeService implements ApiManagementInterface {
                 if (attr.name === "image") apiProduct.imageUrl = attr.value;
                 if (attr.name === "spec") apiProduct.specUrl = attr.value;
                 if (attr.name === "access") apiProduct.access = attr.value;
+                if (attr.name === "type") apiProduct.type = attr.value;
               }
 
             resolve(apiProduct);
