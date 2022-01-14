@@ -16,8 +16,7 @@ export class ApigeeService implements ApiManagementInterface {
       auth.getProjectId().then((projectId) => {
         auth.getAccessToken().then((token) => {
           const form = new FormData();
-          var newFile = fs.readFileSync(bundlePath);
-          form.append('file', newFile, `${proxyName + ".zip"}`);
+          form.append('file', fs.createReadStream(bundlePath), `${proxyName + ".zip"}`);
 
           axios.request({
             url: `https://apigee.googleapis.com/v1/organizations/${projectId}/apis?name=${proxyName}&action=import`,
