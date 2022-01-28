@@ -6,10 +6,35 @@ const auth = new GoogleAuth({
   scopes: 'https://www.googleapis.com/auth/cloud-platform'
 });
 
-import { ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential, ProxyRevision, ProxyDeployment } from "./apigee-types"
-import { ApiManagementInterface } from "./apigee-interface";
+import { ApiManagementInterface, ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential, ProxyRevision, ProxyDeployment, EnvironmentGroup, EnvironmentGroupAttachment } from "./apigee-types"
 
 export class ApigeeService implements ApiManagementInterface {
+  
+  getEnvironments(): Promise<String[]> {
+    return new Promise((resolve, reject) => {
+      auth.getProjectId().then((projectId) => {
+        auth.getClient().then((client) => {
+          client.request({
+            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/environments`,
+            method: 'GET'
+          }).then((response) => {
+            let environments: String[] = response.data as String[];
+            resolve(environments);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
+  }
+  
+  getEnvironmentGroups(): Promise<EnvironmentGroup[]> {
+    throw new Error("Method not implemented.");
+  }
+
+  getEnvironmentGroupAttachments(): Promise<EnvironmentGroupAttachment[]> {
+    throw new Error("Method not implemented.");
+  }
 
   updateProxy(proxyName: string, bundlePath: string): Promise<ProxyRevision> {
     return new Promise((resolve, reject) => {

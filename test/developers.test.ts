@@ -1,5 +1,4 @@
-import { ApiManagementInterface } from "../lib/apigee-interface";
-import { ApiProduct, Developers, Developer, Apps, App, AppCredential } from "../lib/apigee-types";
+import { ApiProduct, Developers, Developer, Apps, App, AppCredential, ApiManagementInterface } from "../lib/apigee-types";
 import { ApigeeService } from "../lib/apigee-service";
 import { expect } from "chai";
 import { doesNotMatch } from "assert";

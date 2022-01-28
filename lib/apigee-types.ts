@@ -1,10 +1,10 @@
 // Apigee DTO structures
 
-interface ApigeeApiProducts {
+export interface ApigeeApiProducts {
   apiProduct: ApigeeApiProduct[];
 }
 
-interface ApigeeApiProduct {
+export interface ApigeeApiProduct {
   name: string;
   displayName: string;
   description: string;
@@ -12,12 +12,12 @@ interface ApigeeApiProduct {
   attributes: KeyValue[];
 }
 
-interface ApigeeApps {
+export interface ApigeeApps {
   app: ApigeeApp[];
   error?: Error;
 }
 
-interface ApigeeApp {
+export interface ApigeeApp {
   appId: string;
   name: string;
   status?: string;
@@ -28,7 +28,7 @@ interface ApigeeApp {
   error?: Error;
 }
 
-interface ApigeeAppCredential {
+export interface ApigeeAppCredential {
   consumerKey: string;
   consumerSecret: string;
   issuedAt: string;
@@ -38,20 +38,20 @@ interface ApigeeAppCredential {
   apiProducts?: ApigeeApiProductName[];
 }
 
-interface ApigeeApiProductName {
+export interface ApigeeApiProductName {
   apiproduct: string;
   status: string;
 }
 
-interface ApigeeAccessToken {
+export interface ApigeeAccessToken {
   access_token: string;
 }
 
-interface ApigeeDevelopers {
+export interface ApigeeDevelopers {
   developer: ApigeeDeveloper[];
 }
 
-interface ApigeeDeveloper {
+export interface ApigeeDeveloper {
   developerId?: string;
   organizationName: string;
   createdAt: string;
@@ -66,19 +66,19 @@ interface ApigeeDeveloper {
   error?: Error;
 }
 
-interface ApigeeRatePlanResponse {
+export interface ApigeeRatePlanResponse {
   ratePlan: ApigeeRatePlan[];
 }
 
-interface ApigeeDevRatePlanResponse {
+export interface ApigeeDevRatePlanResponse {
   developerRatePlan: ApigeeDevRatePlan[];
 }
 
-interface ApigeeDevCreditBalanceResponse {
+export interface ApigeeDevCreditBalanceResponse {
   developerBalance: ApigeeBalance[];
 }
 
-interface ApigeeDevRatePlan {
+export interface ApigeeDevRatePlan {
   id: string;
   nextCycleStartDate: string;
   nextRecurringFeeDate: string;
@@ -89,7 +89,7 @@ interface ApigeeDevRatePlan {
   ratePlan: ApigeeRatePlan;
 }
 
-interface ApigeeRatePlan {
+export interface ApigeeRatePlan {
   id: string;
   displayName: string;
   description: string;
@@ -104,7 +104,7 @@ interface ApigeeRatePlan {
   ratePlanDetails: ApigeeRatePlanDetails[];
 }
 
-interface ApigeeRatePlanDetails {
+export interface ApigeeRatePlanDetails {
   meteringType: string;
   durationType: string;
   ratingParameter: string;
@@ -112,7 +112,7 @@ interface ApigeeRatePlanDetails {
   ratePlanRates: ApigeeRatePlanRates[];
 }
 
-interface ApigeeRatePlanRates {
+export interface ApigeeRatePlanRates {
   ratingParameter: string;
   revenueType: string;
   type: string;
@@ -121,7 +121,7 @@ interface ApigeeRatePlanRates {
   rate: number;
 }
 
-interface ApigeeBalance {
+export interface ApigeeBalance {
   id: string;
   isRecurring: boolean;
   supportedCurrency?: ApigeeCurrency;
@@ -130,7 +130,7 @@ interface ApigeeBalance {
   amount: number;  
 }
 
-interface ApigeeCurrency {
+export interface ApigeeCurrency {
   id: string;
   name: string;
   displayName: string;
@@ -138,11 +138,11 @@ interface ApigeeCurrency {
 
 // Neutral DTO structures
 
-interface ApiProducts {
+export interface ApiProducts {
   apiProducts: ApiProduct[];
 }
 
-interface ApiProduct {
+export interface ApiProduct {
   name: string;
   type?: string;
   displayName: string;
@@ -154,12 +154,12 @@ interface ApiProduct {
   access?: string;
 }
 
-interface Developers {
+export interface Developers {
   developers: Developer[];
   error?: Error;
 }
 
-interface Developer {
+export interface Developer {
   email: string;
   firstName: string;
   lastName: string;
@@ -173,23 +173,23 @@ interface Developer {
   error?: Error;
 }
 
-interface Error {
+export interface Error {
   code: string;
   message: string;
   status: string;
 }
 
-interface KeyValue {
+export interface KeyValue {
   name: string;
   value: string;
 }
 
-interface Apps {
+export interface Apps {
   apps: App[];
   error?: Error;
 }
 
-interface App {
+export interface App {
   appId: string;
   name: string;
   createdAt: string;
@@ -200,7 +200,7 @@ interface App {
   error?: Error;
 }
 
-interface AppCredential {
+export interface AppCredential {
   consumerKey: string;
   consumerSecret: string;
   issuedAt: string;
@@ -211,12 +211,12 @@ interface AppCredential {
   error?: Error;
 }
 
-interface AppCredentialProduct {
+export interface AppCredentialProduct {
   apiproduct: string;
   status?: string;
 }
 
-interface DevRate {
+export interface DevRate {
   id: string;
   nextCycleStartDate: string;
   nextRecurringFeeDate: string;
@@ -227,14 +227,14 @@ interface DevRate {
   ratePlan: Rate;
 }
 
-interface Rate {
+export interface Rate {
   id: string;
   name: string;
   image?: string;
   ratePlanDetails: RateDetail[];
 }
 
-interface RateDetail {
+export interface RateDetail {
   meteringType: string;
   durationType: string;
   ratingParameter: string;
@@ -242,14 +242,14 @@ interface RateDetail {
   ratePlanRates: RateDetailRates[];
 }
 
-interface RateDetailRates {
+export interface RateDetailRates {
   type: string;
   startUnit: number;
   endUnit: number;
   rate: number;  
 }
 
-interface DevCreditAccount {
+export interface DevCreditAccount {
   id: string;
   currency: string;
   isRecurring: boolean;
@@ -258,7 +258,7 @@ interface DevCreditAccount {
   amount: number;
 }
 
-interface ProxyRevision {
+export interface ProxyRevision {
   name: string,
   createdAt?: string,
   displayName?: string,
@@ -267,37 +267,63 @@ interface ProxyRevision {
   revision: string
 }
 
-interface ProxyDeployment {
+export interface ProxyDeployment {
   environment: string,
   apiProxy: string,
   revision: string,
   deployStartTime: string
 }
 
-interface Response {
+export interface EnvironmentGroup {
+  name: string;
+  hostnames: string[];
+  createdAt: string;
+  lastModifiedAt: string;
+  state: string;
+}
+
+export interface EnvironmentGroupAttachment {
+  name: string;
+  environment: string;
+  createdAt: string;
+  state: string;
+}
+
+export interface Response {
   status: number;
   data: object;
 }
 
-interface error {
+export interface error {
   response: Response;
 }
 
-export {
-  ApigeeApiProducts,
-  ApigeeApiProduct,
-  ApiProducts,
-  ApiProduct,
-  ApigeeDevelopers,
-  ApigeeDeveloper,
-  ApigeeApps,
-  ApigeeApp,
-  ApigeeAppCredential,
-  Developers,
-  Developer,
-  Apps,
-  App,
-  AppCredential,
-  ProxyRevision,
-  ProxyDeployment
+export interface ApiManagementInterface {
+  getApiProducts(): Promise<ApiProducts>;
+  createApiProduct(apiProduct: ApiProduct): Promise<ApiProduct>;
+  deleteApiProduct(apiProductName: string): Promise<ApiProduct>;
+
+  getEnvironments(): Promise<String[]>;
+  getEnvironmentGroups(): Promise<EnvironmentGroup[]>;
+  getEnvironmentGroupAttachments(): Promise<EnvironmentGroupAttachment[]>;
+
+  getDevelopers(): Promise<Developers>
+  getDeveloper(email: string): Promise<Developer>
+  createDeveloper(developerData: Developer): Promise<Developer>
+  updateDeveloper(developerData: Developer): Promise<Developer>
+  deleteDeveloper(email: string): Promise<Developer>
+  getApps(email: string) : Promise<Apps>
+  getApp(email: string, appName: string) : Promise<App>
+  createApp(email: string, appName: string, apiProducts: string[]): Promise<App>
+  updateApp(email: string, appName: string, app: App): Promise<App>
+  deleteApp(email: string, appName: string): Promise<App>
+
+  getAppCredential(email: string, appName: string, keyName: string): Promise<AppCredential>
+  updateAppCredential(email: string, appName: string, key: AppCredential): Promise<AppCredential>
+
+  updateAppCredentialAddProducts(email: string, appName: string, keyName: string, apiProducts: string[]): Promise<AppCredential>
+  updateAppCredentialRemoveProduct(email: string, appName: string, keyName: string, apiProduct: string): Promise<AppCredential>  
+
+  updateProxy(proxyName: string, bundlePath: string) : Promise<ProxyRevision>
+  deployProxyRevision(environmentName: string, proxyName: string, proxyVersion: string): Promise<ProxyDeployment>
 }
