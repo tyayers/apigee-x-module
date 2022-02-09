@@ -1,5 +1,5 @@
-import { ApiManagementInterface, ApigeeApiProducts, ApiProducts, ProxyDeployment, ProxyRevision } from "../lib/apigee-types";
-import { ApigeeService } from "../lib/apigee-service";
+import { ApiManagementInterface, ApigeeApiProducts, ApiProducts, ProxyDeployment, ProxyRevision } from "../lib/apigee.types";
+import { ApigeeService } from "../lib/apigee.service";
 import { expect } from "chai";
 import { doesNotMatch } from "assert";
 
@@ -7,7 +7,7 @@ require('mocha');
 
 require('dotenv').config()
 
-let apigeeService: ApiManagementInterface = new ApigeeService();
+let apigeeService: ApiManagementInterface = new ApigeeService(undefined, undefined);
 let revisionNumber: string = "0";
 
 describe('Update proxy', () => {
