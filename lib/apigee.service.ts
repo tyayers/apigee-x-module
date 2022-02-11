@@ -27,7 +27,7 @@ export class ApigeeService implements ApiManagementInterface {
    *
    * @type {string}
    */
-  org: string;
+  _org: string;
   
   /**
    * Optional OAuth token to be used for API calls (if not set then token is fetched using GOOGLE_APPLICATION_CREDENTIALS)
@@ -36,21 +36,31 @@ export class ApigeeService implements ApiManagementInterface {
    * @private
    * @type {string}
    */
-  private token: string;
+  private _token: string;
   
+
   /**
-   * Creates an instance of ApigeeService.
-   * @date 2/9/2022 - 8:13:37 AM
+   * Setter for the org
+   * @date 2/11/2022 - 10:26:01 AM
    *
-   * @constructor
-   * @param {string} org Optional org (if none is given then GCP project from service account is used)
-   * @param {string} token Optional OAuth token to be used for the request (if none is given then Google Application Credentials are used to get a token)
+   * @public
+   * @type {string} The new org to set
    */
-  constructor(org: string, token: string) {
-    this.org = org;
-    this.token = token;
+  public set org(newOrg: string) {
+    this._org = newOrg;
   }
 
+
+  /**
+   * Setter for the GCP access token for Apigee API calls
+   * @date 2/11/2022 - 10:26:24 AM
+   *
+   * @public
+   * @type {string} The new token to use
+   */
+  public set token(newToken: string) {
+    this._token = newToken;
+  }
 
   /**
    * Gets the org that is available to be used (either set or from Google Auth project)
@@ -60,8 +70,8 @@ export class ApigeeService implements ApiManagementInterface {
    */
   getOrg(): Promise<string> {
     return new Promise((resolve, reject) => {
-      if (this.org)
-        resolve(this.org);
+      if (this._org)
+        resolve(this._org);
       else
         auth.getProjectId().then((projectId) => {
           resolve(projectId);
@@ -78,8 +88,8 @@ export class ApigeeService implements ApiManagementInterface {
    */
   getToken(): Promise<string> {
     return new Promise((resolve, reject) => {
-      if (this.token)
-        resolve(this.token);
+      if (this._token)
+        resolve(this._token);
       else
         auth.getAccessToken().then((token) => {
           resolve(token);

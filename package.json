@@ -1,6 +1,6 @@
 {
   "name": "apigee-x-module",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Module for integrating with the Apigee X platform for TS/JS developer portal integrations.",
   "homepage": "https://github.com/tyayers/apigee-x-module",
   "bugs": "https://github.com/tyayers/apigee-x-module/issues",
