@@ -194,7 +194,7 @@ export class ApigeeService implements ApiManagementInterface {
 
           let url = `https://apigee.googleapis.com/v1/organizations/${projectId}/environments/${environmentName}/apis/${proxyName}/revisions/${proxyRevision}/deployments?override=true`;
           if (serviceAccountEmail)
-            url += `&serviceAccount${serviceAccountEmail}`;
+            url += `&serviceAccount=${serviceAccountEmail}`;
 
           axios.request({
             url: url,
