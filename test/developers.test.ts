@@ -1,13 +1,13 @@
-import { ApiProduct, Developers, Developer, Apps, App, AppCredential, ApiManagementInterface } from "../lib/apigee.types";
-import { ApigeeService } from "../lib/apigee.service";
+import { ApiProduct, Developers, Developer, Apps, App, AppCredential, ApiManagementInterface } from "../lib/interfaces";
+import { ApigeeService } from "../lib/service";
 import { expect } from "chai";
 import { doesNotMatch } from "assert";
 
-require('mocha');
+import { } from 'mocha';
 
 require('dotenv').config()
 
-let apigeeService: ApiManagementInterface = new ApigeeService(undefined, undefined);
+let apigeeService: ApiManagementInterface = new ApigeeService();
 
 let testDeveloper: Developer = {
   email: "test.developer@example.com",
@@ -112,7 +112,7 @@ describe('Create App for product', () => {
       expect(response.name).to.equal(testAppName);
       expect(response.credentials[0].apiProducts.length).to.equal(1);
       expect(response.credentials[0].apiProducts[0].apiproduct).to.equal(testApiProduct1.name);
-      
+
       testApp = response;
     });
   });
@@ -120,7 +120,7 @@ describe('Create App for product', () => {
 
 describe('Add a product to an existing key', () => {
   return it('should return an updated credential object with new product added', () => {
-    
+
     testApp.credentials[0].apiProducts.push({
       apiproduct: testApiProduct2.name
     });
@@ -138,7 +138,7 @@ describe('Add a product to an existing key', () => {
 
 describe('Remove a product from an existing key', () => {
   return it('should return an updated credential object without removed product', () => {
-    
+
     // Remove product that was added
     testApp.credentials[0].apiProducts.splice(1, 1);
 

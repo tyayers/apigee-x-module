@@ -7,8 +7,7 @@ const auth = new GoogleAuth({
 });
 
 //import { resolve } from "path/posix";
-import { ApiManagementInterface, ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential, ProxyRevision, ProxyDeployment, EnvironmentGroup, EnvironmentGroupAttachment } from "./apigee.types"
-
+import { ApiManagementInterface, ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential, ProxyRevision, ProxyDeployment, EnvironmentGroup, EnvironmentGroupAttachment } from "./interfaces"
 
 /**
  * Apigee Service for using the Apigee X API from TS/JS clients
@@ -28,7 +27,7 @@ export class ApigeeService implements ApiManagementInterface {
    * @type {string}
    */
   _org: string;
-  
+
   /**
    * Optional OAuth token to be used for API calls (if not set then token is fetched using GOOGLE_APPLICATION_CREDENTIALS)
    * @date 2/9/2022 - 8:19:34 AM
@@ -37,7 +36,7 @@ export class ApigeeService implements ApiManagementInterface {
    * @type {string}
    */
   private _token: string;
-  
+
 
   /**
    * Setter for the org
@@ -124,7 +123,7 @@ export class ApigeeService implements ApiManagementInterface {
       })
     });
   }
-  
+
   /**
    * (Not yet implemented) - In the future will return the environment groups from an org
    * @date 2/9/2022 - 8:29:12 AM
@@ -166,7 +165,7 @@ export class ApigeeService implements ApiManagementInterface {
             headers: {
               "Authorization": `Bearer ${token}`,
               ...form.getHeaders()
-            },            
+            },
             data: form
           }).then((response) => {
             let proxyRevision: ProxyRevision = response.data as ProxyRevision;
@@ -188,12 +187,17 @@ export class ApigeeService implements ApiManagementInterface {
    * @param {string} proxyRevision The revision of the proxy to deploy
    * @returns {Promise<ProxyDeployment>} Information on the status of the proxy deployment
    */
-  deployProxyRevision(environmentName: string, proxyName: string, proxyRevision: string): Promise<ProxyDeployment> {
+  deployProxyRevision(environmentName: string, proxyName: string, proxyRevision: string, serviceAccountEmail?: string): Promise<ProxyDeployment> {
     return new Promise((resolve, reject) => {
       this.getOrg().then((projectId) => {
         this.getToken().then((token) => {
+
+          let url = `https://apigee.googleapis.com/v1/organizations/${projectId}/environments/${environmentName}/apis/${proxyName}/revisions/${proxyRevision}/deployments?override=true`;
+          if (serviceAccountEmail)
+            url += `&serviceAccount${serviceAccountEmail}`;
+
           axios.request({
-            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/environments/${environmentName}/apis/${proxyName}/revisions/${proxyRevision}/deployments?override=true`,
+            url: url,
             method: "POST",
             headers: {
               "Authorization": `Bearer ${token}`

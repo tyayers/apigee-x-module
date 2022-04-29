@@ -11,10 +11,7 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "type": "pwa-node",
-      "env": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tylerayers/key.json"
-      }
+      "type": "pwa-node"
     },
     {
       "type": "node",
@@ -22,19 +19,16 @@
       "name": "Mocha All",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
-          "-r",
-          "ts-node/register",
-          "--timeout",
-          "999999",
-          "--colors",
-          "${workspaceFolder}/test/**/*.test.ts",
+        "-r",
+        "ts-node/register",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/test/**/*.test.ts",
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "protocol": "inspector",
-      "env":{
-        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tylerayers/key.json"
-      }
+      "protocol": "inspector"
     },
     {
       "type": "node",
@@ -42,19 +36,16 @@
       "name": "Mocha proxy test",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "args": [
-          "-r",
-          "ts-node/register",
-          "--timeout",
-          "999999",
-          "--colors",
-          "${workspaceFolder}/test/proxies.test.ts",
+        "-r",
+        "ts-node/register",
+        "--timeout",
+        "999999",
+        "--colors",
+        "${workspaceFolder}/test/proxies.test.ts",
       ],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "protocol": "inspector",
-      "env":{
-        "GOOGLE_APPLICATION_CREDENTIALS": "/home/tylerayers/key.json"
-      }
-    },    
+      "protocol": "inspector"
+    },
   ]
 }

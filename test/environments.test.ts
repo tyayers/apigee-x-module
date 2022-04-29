@@ -1,12 +1,12 @@
-import { ApiManagementInterface } from "../lib/apigee.types";
-import { ApigeeService } from "../lib/apigee.service";
+import { ApiManagementInterface } from "../lib/interfaces";
+import { ApigeeService } from "../lib/service";
 import { expect } from "chai";
 import { doesNotMatch } from "assert";
 
 require('mocha');
 require('dotenv').config()
 
-let apigeeService: ApiManagementInterface = new ApigeeService(undefined, undefined);
+let apigeeService: ApiManagementInterface = new ApigeeService();
 
 describe('Get environments', () => {
   return it('should return the environments', () => {

@@ -1,6 +1,6 @@
 {
   "name": "apigee-x-module",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Module for integrating with the Apigee X platform for TS/JS developer portal integrations.",
   "homepage": "https://github.com/tyayers/apigee-x-module",
   "bugs": "https://github.com/tyayers/apigee-x-module/issues",
@@ -18,7 +18,7 @@
   ],
   "scripts": {
     "build": "rm -rf dist/** && tsc",
-    "test": "mocha -r ts-node/register test/**/*.test.ts",
+    "test": "mocha -r ts-node/register test/**/*.test.ts --timeout 5000",
     "deploy": "npm run build && npm publish"
   },
   "dependencies": {
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.9.6",
+    "@types/node": "^16.11.32",
     "chai": "^4.3.4",
     "mocha": "^9.1.1",
     "ts-node": "^10.2.1",

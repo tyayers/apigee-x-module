@@ -127,7 +127,7 @@ export interface ApigeeBalance {
   supportedCurrency?: ApigeeCurrency;
   chargePerUsage: boolean;
   usage: number;
-  amount: number;  
+  amount: number;
 }
 
 export interface ApigeeCurrency {
@@ -246,7 +246,7 @@ export interface RateDetailRates {
   type: string;
   startUnit: number;
   endUnit: number;
-  rate: number;  
+  rate: number;
 }
 
 export interface DevCreditAccount {
@@ -312,8 +312,8 @@ export interface ApiManagementInterface {
   createDeveloper(developerData: Developer): Promise<Developer>
   updateDeveloper(developerData: Developer): Promise<Developer>
   deleteDeveloper(email: string): Promise<Developer>
-  getApps(email: string) : Promise<Apps>
-  getApp(email: string, appName: string) : Promise<App>
+  getApps(email: string): Promise<Apps>
+  getApp(email: string, appName: string): Promise<App>
   createApp(email: string, appName: string, apiProducts: string[]): Promise<App>
   updateApp(email: string, appName: string, app: App): Promise<App>
   deleteApp(email: string, appName: string): Promise<App>
@@ -322,8 +322,8 @@ export interface ApiManagementInterface {
   updateAppCredential(email: string, appName: string, key: AppCredential): Promise<AppCredential>
 
   updateAppCredentialAddProducts(email: string, appName: string, keyName: string, apiProducts: string[]): Promise<AppCredential>
-  updateAppCredentialRemoveProduct(email: string, appName: string, keyName: string, apiProduct: string): Promise<AppCredential>  
+  updateAppCredentialRemoveProduct(email: string, appName: string, keyName: string, apiProduct: string): Promise<AppCredential>
 
-  updateProxy(proxyName: string, bundlePath: string) : Promise<ProxyRevision>
-  deployProxyRevision(environmentName: string, proxyName: string, proxyVersion: string): Promise<ProxyDeployment>
+  updateProxy(proxyName: string, bundlePath: string): Promise<ProxyRevision>
+  deployProxyRevision(environmentName: string, proxyName: string, proxyVersion: string, serviceAccountEmail?: string): Promise<ProxyDeployment>
 }
