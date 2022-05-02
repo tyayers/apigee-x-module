@@ -7,7 +7,7 @@ const auth = new GoogleAuth({
 });
 
 //import { resolve } from "path/posix";
-import { ApiManagementInterface, ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential, ProxyRevision, ProxyDeployment, EnvironmentGroup, EnvironmentGroupAttachment } from "./interfaces"
+import { ApiManagementInterface, ApigeeApiProducts, ApigeeApiProduct, ApiProducts, ApiProduct, App, ApigeeDevelopers, ApigeeDeveloper, Developers, Developer, ApigeeApps, ApigeeApp, ApigeeAppCredential, Apps, AppCredential, ProxyRevision, ProxyDeployment, EnvironmentGroup, EnvironmentGroupAttachment, ApigeeEnvGroupsReponse, ApigeeEnvGroupAttachmentResponse } from "./interfaces"
 
 /**
  * Apigee Service for using the Apigee X API from TS/JS clients
@@ -125,23 +125,62 @@ export class ApigeeService implements ApiManagementInterface {
   }
 
   /**
-   * (Not yet implemented) - In the future will return the environment groups from an org
+   * Retrieves all environment groups for an org
    * @date 2/9/2022 - 8:29:12 AM
    *
    * @returns {Promise<EnvironmentGroup[]>} List of environment groups
    */
   getEnvironmentGroups(): Promise<EnvironmentGroup[]> {
-    throw new Error("Method not implemented.");
+    return new Promise((resolve, reject) => {
+      this.getOrg().then((projectId) => {
+        this.getToken().then((token) => {
+          axios.request({
+            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/envgroups`,
+            method: 'GET',
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          }).then((response) => {
+            let apigeeEnvGroups = response.data as ApigeeEnvGroupsReponse;
+            let envGroups: EnvironmentGroup[] = apigeeEnvGroups.environmentGroups;
+
+            resolve(envGroups);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
   }
 
   /**
-   * (Not yet implemented) - In the future will return the environment group environment attachments
-   * @date 2/9/2022 - 8:29:43 AM
+   * Retrieves all environment attachments for an environment group
+   * @date 5/2/2022 - 12:28:23 PM
    *
-   * @returns {Promise<EnvironmentGroupAttachment[]>} List of envgroup env attachments
+   * @param {String} environmentGroup The environment group to get the attachments for
+   * @returns {Promise<EnvironmentGroupAttachment[]>} The array of attachments
    */
-  getEnvironmentGroupAttachments(): Promise<EnvironmentGroupAttachment[]> {
-    throw new Error("Method not implemented.");
+  getEnvironmentGroupAttachments(environmentGroup: String): Promise<EnvironmentGroupAttachment[]> {
+    return new Promise((resolve, reject) => {
+      this.getOrg().then((projectId) => {
+        this.getToken().then((token) => {
+          axios.request({
+            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/envgroups/${environmentGroup}/attachments`,
+            method: 'GET',
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          }).then((response) => {
+            let apigeeEnvGroupAttachments = response.data as ApigeeEnvGroupAttachmentResponse;
+            let envGroupAttachments: EnvironmentGroupAttachment[] = apigeeEnvGroupAttachments.environmentGroupAttachments;
+
+            resolve(envGroupAttachments);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
   }
 
   /**

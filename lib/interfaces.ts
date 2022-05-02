@@ -136,6 +136,14 @@ export interface ApigeeCurrency {
   displayName: string;
 }
 
+export interface ApigeeEnvGroupsReponse {
+  environmentGroups: EnvironmentGroup[];
+}
+
+export interface ApigeeEnvGroupAttachmentResponse {
+  environmentGroupAttachments: EnvironmentGroupAttachment[];
+}
+
 // Neutral DTO structures
 
 export interface ApiProducts {
@@ -299,13 +307,18 @@ export interface error {
 }
 
 export interface ApiManagementInterface {
+
+  org: String;
+  token: String;
+  getOrg(): Promise<String>;
+
   getApiProducts(): Promise<ApiProducts>;
   createApiProduct(apiProduct: ApiProduct): Promise<ApiProduct>;
   deleteApiProduct(apiProductName: string): Promise<ApiProduct>;
 
   getEnvironments(): Promise<String[]>;
   getEnvironmentGroups(): Promise<EnvironmentGroup[]>;
-  getEnvironmentGroupAttachments(): Promise<EnvironmentGroupAttachment[]>;
+  getEnvironmentGroupAttachments(environmentGroup: String): Promise<EnvironmentGroupAttachment[]>;
 
   getDevelopers(): Promise<Developers>
   getDeveloper(email: string): Promise<Developer>
