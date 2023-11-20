@@ -1,2 +1,2 @@
-export * from "../lib/interfaces"
-export * from "../lib/service"
+export * from "../lib/interfaces.js"
+export * from "../lib/service.js"

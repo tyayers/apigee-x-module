@@ -3,8 +3,9 @@ import { ApigeeService } from "../lib/service";
 import { expect } from "chai";
 import { doesNotMatch } from "assert";
 
-require('mocha');
-require('dotenv').config()
+import mocha from 'mocha';
+import dotenv from 'dotenv';
+dotenv.config();
 
 let apigeeService: ApiManagementInterface = new ApigeeService();
 

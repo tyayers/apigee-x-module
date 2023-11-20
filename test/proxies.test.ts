@@ -3,9 +3,10 @@ import { ApigeeService } from "../lib/service";
 import { expect } from "chai";
 import { doesNotMatch } from "assert";
 
-require('mocha');
+import mocha from 'mocha';
 
-require('dotenv').config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 let apigeeService: ApiManagementInterface = new ApigeeService();
 let revisionNumber: string = "0";

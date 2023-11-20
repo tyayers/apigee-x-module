@@ -5,7 +5,8 @@ import { doesNotMatch } from "assert";
 
 import { } from 'mocha';
 
-require('dotenv').config()
+import dotenv from 'dotenv';
+dotenv.config();
 
 let apigeeService: ApiManagementInterface = new ApigeeService();
 
@@ -82,7 +83,7 @@ describe('Get non-existent developer', () => {
   return it('should return 404 developer not found', () => {
     return apigeeService.getDeveloper("testDeveloper@example.com").then((response: Developer) => {
       //console.log(response);
-      expect(response.error.code).to.equal(404);
+      expect(response?.error?.code).to.equal(404);
     });
   });
 });
@@ -91,7 +92,7 @@ describe('Create App for non-existent product', () => {
   return it('should return 400 api product does not exist', () => {
     return apigeeService.createApp(testDeveloper.email, testAppName, ["Test Product"]).then((response: App) => {
       //console.log(response);
-      expect(response.error.code).to.equal(400);
+      expect(response?.error?.code).to.equal(400);
     });
   });
 });
@@ -110,7 +111,7 @@ describe('Create App for product', () => {
     return apigeeService.createApp(testDeveloper.email, testAppName, [testApiProduct1.name]).then((response: App) => {
       // console.log(response);
       expect(response.name).to.equal(testAppName);
-      expect(response.credentials[0].apiProducts.length).to.equal(1);
+      expect(response?.credentials[0].apiProducts?.length).to.equal(1);
       expect(response.credentials[0].apiProducts[0].apiproduct).to.equal(testApiProduct1.name);
 
       testApp = response;
@@ -130,7 +131,7 @@ describe('Add a product to an existing key', () => {
 
       expect(response.apiProducts[0].apiproduct === testApiProduct1.name);
       expect(response.apiProducts[1].apiproduct === testApiProduct2.name);
-      expect(response.apiProducts.length).to.equal(2);
+      expect(response?.apiProducts?.length).to.equal(2);
       testApp.credentials[0] = response;
     });
   });
@@ -145,8 +146,8 @@ describe('Remove a product from an existing key', () => {
     return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
       //console.log(response);
 
-      expect(response.apiProducts.length).to.equal(1);
-      expect(response.apiProducts[0].apiproduct === testApiProduct1.name);
+      expect(response?.apiProducts?.length).to.equal(1);
+      expect(response?.apiProducts[0].apiproduct === testApiProduct1.name);
     });
   });
 });

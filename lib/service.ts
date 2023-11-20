@@ -1,7 +1,7 @@
-const FormData = require('form-data');
-const fs = require('fs');
-const axios = require('axios');
-const { GoogleAuth } = require('google-auth-library');
+import FormData from 'form-data';
+import fs from 'fs';
+import axios from 'axios';
+import { GoogleAuth } from 'google-auth-library';
 const auth = new GoogleAuth({
   scopes: 'https://www.googleapis.com/auth/cloud-platform'
 });
