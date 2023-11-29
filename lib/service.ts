@@ -74,6 +74,8 @@ export class ApigeeService implements ApiManagementInterface {
       else
         auth.getProjectId().then((projectId) => {
           resolve(projectId);
+        }).catch((error) => {
+          reject("No project found.")
         });
     });
   }
@@ -218,6 +220,40 @@ export class ApigeeService implements ApiManagementInterface {
   }
 
   /**
+   * Uploads and updates a proxy bundle to an org, creating a new version that can be deployed
+   * @date 2/9/2022 - 8:30:43 AM
+   *
+   * @param {string} proxyName The name of the proxy (will be created or updated if it already exists)
+   * @param {string} bundlePath The path to the bundle zip file
+   * @returns {Promise<ProxyRevision>} New proxy revision update information
+   */
+  updateFlow(flowName: string, bundlePath: string): Promise<ProxyRevision> {
+    return new Promise((resolve, reject) => {
+      this.getOrg().then((projectId) => {
+        this.getToken().then((token) => {
+          const form = new FormData();
+          form.append('file', fs.createReadStream(bundlePath), `${flowName + ".zip"}`);
+
+          axios.request({
+            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/sharedflows?name=${flowName}&action=import`,
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              ...form.getHeaders()
+            },
+            data: form
+          }).then((response) => {
+            let proxyRevision: ProxyRevision = response.data as ProxyRevision;
+            resolve(proxyRevision);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
+  }
+
+  /**
    * Deploys a revision of a proxy to an environment
    * @date 2/9/2022 - 8:31:54 AM
    *
@@ -232,6 +268,41 @@ export class ApigeeService implements ApiManagementInterface {
         this.getToken().then((token) => {
 
           let url = `https://apigee.googleapis.com/v1/organizations/${projectId}/environments/${environmentName}/apis/${proxyName}/revisions/${proxyRevision}/deployments?override=true`;
+          if (serviceAccountEmail)
+            url += `&serviceAccount=${serviceAccountEmail}`;
+
+          axios.request({
+            url: url,
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          }).then((response) => {
+            let apigeeDeployment: ProxyDeployment = response.data as ProxyDeployment;
+            resolve(apigeeDeployment);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
+  }
+
+  /**
+   * Deploys a revision of a proxy to an environment
+   * @date 2/9/2022 - 8:31:54 AM
+   *
+   * @param {string} environmentName The environment to deploy to
+   * @param {string} proxyName The name of the proxy to deploy
+   * @param {string} proxyRevision The revision of the proxy to deploy
+   * @returns {Promise<ProxyDeployment>} Information on the status of the proxy deployment
+   */
+  deployFlowRevision(environmentName: string, flowName: string, flowRevision: string, serviceAccountEmail?: string): Promise<ProxyDeployment> {
+    return new Promise((resolve, reject) => {
+      this.getOrg().then((projectId) => {
+        this.getToken().then((token) => {
+
+          let url = `https://apigee.googleapis.com/v1/organizations/${projectId}/environments/${environmentName}/sharedflows/${flowName}/revisions/${flowRevision}/deployments?override=true`;
           if (serviceAccountEmail)
             url += `&serviceAccount=${serviceAccountEmail}`;
 

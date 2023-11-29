@@ -339,4 +339,7 @@ export interface ApiManagementInterface {
 
   updateProxy(proxyName: string, bundlePath: string): Promise<ProxyRevision>
   deployProxyRevision(environmentName: string, proxyName: string, proxyVersion: string, serviceAccountEmail?: string): Promise<ProxyDeployment>
+
+  updateFlow(flowName: string, bundlePath: string): Promise<ProxyRevision>
+  deployFlowRevision(environmentName: string, flowNameName: string, flowVersion: string, serviceAccountEmail?: string): Promise<ProxyDeployment>
 }
