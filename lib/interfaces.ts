@@ -26,6 +26,7 @@ export interface ApigeeApp {
   credentials?: ApigeeAppCredential[];
   apiProducts?: string[];
   error?: Error;
+  attributes: KeyValue[];
 }
 
 export interface ApigeeAppCredential {
@@ -160,6 +161,7 @@ export interface ApiProduct {
   specUrl?: string;
   status?: string;
   access?: string;
+  attributes: KeyValue[];
 }
 
 export interface Developers {
@@ -179,6 +181,7 @@ export interface Developer {
   status?: string;
   apps?: string[];
   error?: Error;
+  attributes: KeyValue[];
 }
 
 export interface Error {
@@ -206,6 +209,7 @@ export interface App {
   status?: string;
   credentials?: AppCredential[];
   error?: Error;
+  attributes: KeyValue[];
 }
 
 export interface AppCredential {
@@ -313,6 +317,7 @@ export interface ApiManagementInterface {
   getOrg(): Promise<String>;
 
   getApiProducts(): Promise<ApiProducts>;
+  getApiProduct(name: string): Promise<ApiProduct>;
   createApiProduct(apiProduct: ApiProduct): Promise<ApiProduct>;
   deleteApiProduct(apiProductName: string): Promise<ApiProduct>;
 

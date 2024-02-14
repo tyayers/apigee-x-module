@@ -351,9 +351,12 @@ export class ApigeeService implements ApiManagementInterface {
                 if (apigeeProduct.attributes)
                   for (const attr of apigeeProduct.attributes) {
                     if (attr.name === "image") apiProduct.imageUrl = attr.value;
-                    if (attr.name === "spec") apiProduct.specUrl = attr.value;
-                    if (attr.name === "access") apiProduct.access = attr.value;
-                    if (attr.name === "type") apiProduct.type = attr.value;
+                    else if (attr.name === "spec") apiProduct.specUrl = attr.value;
+                    else if (attr.name === "access") apiProduct.access = attr.value;
+                    else if (attr.name === "type") apiProduct.type = attr.value;
+
+                    // Also add to general attributes collection
+                    apiProduct.attributes[attr.name] = attr.value;
                   }
 
                 products.apiProducts.push(apiProduct);
@@ -361,6 +364,35 @@ export class ApigeeService implements ApiManagementInterface {
             }
 
             resolve(products);
+          }).catch((error) => {
+            reject(error);
+          });
+        });
+      });
+    });
+  }
+
+  /**
+   * Gets a single API product
+   * @date 2/9/2022 - 8:34:45 AM
+   *
+   * @returns {Promise<ApiProduct>} API product
+   */
+  getApiProduct(name: string): Promise<ApiProduct> {
+    return new Promise((resolve, reject) => {
+      this.getOrg().then((projectId) => {
+        this.getToken().then((token) => {
+          axios.request({
+            url: `https://apigee.googleapis.com/v1/organizations/${projectId}/apiproducts/${name}`,
+            method: 'GET',
+            headers: {
+              "Authorization": `Bearer ${token}`
+            }
+          }).then((response) => {
+            let apigeeProduct: ApigeeApiProduct = response.data as ApigeeApiProduct;
+            let product: ApiProduct = apigeeProduct as ApiProduct;
+
+            resolve(product);
           }).catch((error) => {
             reject(error);
           });

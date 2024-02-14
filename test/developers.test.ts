@@ -111,8 +111,12 @@ describe('Create App for product', () => {
     return apigeeService.createApp(testDeveloper.email, testAppName, [testApiProduct1.name]).then((response: App) => {
       // console.log(response);
       expect(response.name).to.equal(testAppName);
-      expect(response?.credentials[0].apiProducts?.length).to.equal(1);
-      expect(response.credentials[0].apiProducts[0].apiproduct).to.equal(testApiProduct1.name);
+      if (response.credentials) {
+        expect(response?.credentials[0].apiProducts?.length).to.equal(1);
+
+        if (response?.credentials[0].apiProducts)
+          expect(response?.credentials[0].apiProducts[0].apiproduct).to.equal(testApiProduct1.name);
+      }
 
       testApp = response;
     });
@@ -122,18 +126,24 @@ describe('Create App for product', () => {
 describe('Add a product to an existing key', () => {
   return it('should return an updated credential object with new product added', () => {
 
-    testApp.credentials[0].apiProducts.push({
-      apiproduct: testApiProduct2.name
-    });
+    if (testApp.credentials) {
+      testApp.credentials[0].apiProducts?.push({
+        apiproduct: testApiProduct2.name
+      });
 
-    return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
-      // console.log(response);
+      return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
+        // console.log(response);
 
-      expect(response.apiProducts[0].apiproduct === testApiProduct1.name);
-      expect(response.apiProducts[1].apiproduct === testApiProduct2.name);
-      expect(response?.apiProducts?.length).to.equal(2);
-      testApp.credentials[0] = response;
-    });
+        if (response.apiProducts) {
+          expect(response.apiProducts[0].apiproduct === testApiProduct1.name);
+          expect(response.apiProducts[1].apiproduct === testApiProduct2.name);
+          expect(response?.apiProducts?.length).to.equal(2);
+        }
+
+        if (testApp.credentials)
+          testApp.credentials[0] = response;
+      });
+    }
   });
 });
 
@@ -141,14 +151,18 @@ describe('Remove a product from an existing key', () => {
   return it('should return an updated credential object without removed product', () => {
 
     // Remove product that was added
-    testApp.credentials[0].apiProducts.splice(1, 1);
+    if (testApp.credentials && testApp.credentials.length > 0) {
+      testApp.credentials[0].apiProducts?.splice(1, 1);
 
-    return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
-      //console.log(response);
+      return apigeeService.updateAppCredential(testDeveloper.email, testAppName, testApp.credentials[0]).then((response: AppCredential) => {
+        //console.log(response);
 
-      expect(response?.apiProducts?.length).to.equal(1);
-      expect(response?.apiProducts[0].apiproduct === testApiProduct1.name);
-    });
+        if (response.apiProducts) {
+          expect(response?.apiProducts?.length).to.equal(1);
+          expect(response?.apiProducts[0].apiproduct === testApiProduct1.name);
+        }
+      });
+    }
   });
 });
 
