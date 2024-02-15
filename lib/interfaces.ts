@@ -181,7 +181,7 @@ export interface Developer {
   status?: string;
   apps?: string[];
   error?: Error;
-  attributes: KeyValue[];
+  attributes?: KeyValue[];
 }
 
 export interface Error {
@@ -209,7 +209,7 @@ export interface App {
   status?: string;
   credentials?: AppCredential[];
   error?: Error;
-  attributes: KeyValue[];
+  attributes?: KeyValue[];
 }
 
 export interface AppCredential {
