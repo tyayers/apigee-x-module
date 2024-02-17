@@ -332,11 +332,13 @@ export interface ApiManagementInterface {
   deleteDeveloper(email: string): Promise<Developer>
   getApps(email: string): Promise<Apps>
   getApp(email: string, appName: string): Promise<App>
-  createApp(email: string, appName: string, apiProducts: string[]): Promise<App>
+  createApp(email: string, appName: string, apiProducts: string[], description?: string): Promise<App>
   updateApp(email: string, appName: string, app: App): Promise<App>
   deleteApp(email: string, appName: string): Promise<App>
 
+  addAppCredential(email: string, appName: string, app: App): Promise<App>
   getAppCredential(email: string, appName: string, keyName: string): Promise<AppCredential>
+  deleteAppCredential(email: string, appName: string, keyName: string): Promise<AppCredential>
   updateAppCredential(email: string, appName: string, key: AppCredential): Promise<AppCredential>
 
   updateAppCredentialAddProducts(email: string, appName: string, keyName: string, apiProducts: string[]): Promise<AppCredential>

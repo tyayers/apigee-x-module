@@ -705,7 +705,7 @@ export class ApigeeService implements ApiManagementInterface {
    * @param {string[]} apiProducts The API Products that the app should have access to
    * @returns {Promise<App>} New app data, including first credential and key
    */
-  createApp(email: string, appName: string, apiProducts: string[]): Promise<App> {
+  createApp(email: string, appName: string, apiProducts: string[], description: string = ""): Promise<App> {
     return new Promise((resolve, reject) => {
       this.getOrg().then((projectId) => {
         this.getToken().then((token) => {
@@ -718,7 +718,13 @@ export class ApigeeService implements ApiManagementInterface {
             },
             "data": {
               name: appName,
-              apiProducts: apiProducts
+              apiProducts: apiProducts,
+              attributes: [
+                {
+                  name: "notes",
+                  value: description
+                }
+              ]
             }
           }
           ).then((response) => {
@@ -789,6 +795,44 @@ export class ApigeeService implements ApiManagementInterface {
           axios.request({
             "url": `https://apigee.googleapis.com/v1/organizations/${projectId}/developers/${email}/apps/${appName}`,
             "method": "PUT",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            "data": app
+          }
+          ).then((response) => {
+            let apigeeApp: ApigeeApp = response.data as ApigeeApp;
+            let app: App = apigeeApp as App;
+
+            resolve(app);
+          }).catch((error) => {
+            if (error.response && error.response.data)
+              resolve(error.response.data as App);
+            else
+              reject(error);
+          });
+        });
+      });
+    });
+  }
+
+  /**
+   * Updates a developer app object with a new credential key
+   * @date 2/9/2022 - 8:48:31 AM
+   *
+   * @param {string} email The developer email
+   * @param {string} appName The name of the app
+   * @param {App} app The app definition 
+   * @returns {Promise<App>} The updated app object
+   */
+  addAppCredential(email: string, appName: string, app: App): Promise<App> {
+    return new Promise((resolve, reject) => {
+      this.getOrg().then((projectId) => {
+        this.getToken().then((token) => {
+          axios.request({
+            "url": `https://apigee.googleapis.com/v1/organizations/${projectId}/developers/${email}/apps/${appName}`,
+            "method": "POST",
             "headers": {
               "Content-Type": "application/json",
               "Authorization": `Bearer ${token}`
@@ -914,6 +958,44 @@ export class ApigeeService implements ApiManagementInterface {
       });
     });
   }
+
+  /**
+   * Delete a credential from an app
+   * @date 2/9/2022 - 8:49:13 AM
+   *
+   * @param {string} email The developer's email
+   * @param {string} appName The name of the app
+   * @param {string} keyName The name of the key
+   * @returns {Promise<AppCredential>} App credential object
+   */
+  deleteAppCredential(email: string, appName: string, keyName: string): Promise<AppCredential> {
+    return new Promise((resolve, reject) => {
+      this.getOrg().then((projectId) => {
+        this.getToken().then((token) => {
+          axios.request({
+            "url": `https://apigee.googleapis.com/v1/organizations/${projectId}/developers/${email}/apps/${appName}/keys/${keyName}`,
+            "method": "DELETE",
+            "headers": {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            }
+          }
+          ).then((response) => {
+            let apigeeAppCredential: ApigeeAppCredential = response.data as ApigeeAppCredential;
+            let appCredential: AppCredential = apigeeAppCredential as AppCredential;
+
+            resolve(appCredential);
+          }).catch((error) => {
+            if (error.response && error.response.data)
+              resolve(error.response.data as AppCredential);
+            else
+              reject(error);
+          });
+        });
+      });
+    });
+  }
+
 
   /**
    * Update an app credential API product affiliation
