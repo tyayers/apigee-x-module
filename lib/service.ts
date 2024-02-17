@@ -721,7 +721,7 @@ export class ApigeeService implements ApiManagementInterface {
               apiProducts: apiProducts,
               attributes: [
                 {
-                  name: "notes",
+                  name: "Notes",
                   value: description
                 }
               ]
